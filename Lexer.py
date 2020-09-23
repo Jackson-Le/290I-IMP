@@ -1,12 +1,12 @@
 from sly import Lexer
 
 class TokenLexer(Lexer):
-    tokens = { VARS, NUMBERS, COMS }
+    tokens = { VARS, NUMBERS }
     ignore = '\t '
-    literals = {':=', '+', '-', '/', '*', '/', '(', ')', ',', ';'}
+    literals = {'=', '+', '-', '/', '*', '/', '(', ')', ',', ';'}
 
     VARS = r'[a-zA-Z_][a-zA-Z\d_]'
-    COMS = r'[(if)*(else)*(while)*(then)*]+'
+    #COMS = r'[(if)*(else)*(while)*(then)*]+'
 
     @_(r'\d+')
     def NUMBERS(self, val):

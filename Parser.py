@@ -1,5 +1,6 @@
 from sly import Parser
-class BasicParser(Parser):
+import Lexer
+class Parser(Parser):
     tokens = Lexer.TokenLexer.tokens
 
     precedence = (
@@ -15,15 +16,15 @@ class BasicParser(Parser):
     def statement(self, input):
         pass
 
-    @_(':=')
+    @_('assignment')
     def statement(self, input):
         return input.assignment
 
-    @_('VARS ":=" expr')
+    @_('VARS "=" expr')
     def assignment(self, input):
-        return (':=', input.VARS, input.expr)
+        return ('=', input.VARS, input.expr)
 
-     @_('expr')
+    @_('expr')
     def statement(self, input):
         return (input.expr)
 
@@ -47,10 +48,10 @@ class BasicParser(Parser):
     def expr(self, input):
         return input.expr
 
-    @_('NAME')
+    @_('VARS')
     def expr(self, input):
-        return ('var', input.NAME)
+        return ('VARS', input.VARS)
 
-    @_('NUMBER')
+    @_('NUMBERS')
     def expr(self, input):
-        return ('num', input.NUMBER)
+        return ('NUMBERS', input.NUMBERS)
