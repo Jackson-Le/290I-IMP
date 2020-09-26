@@ -17,6 +17,7 @@ if __name__ == '__main__':
             break
 
         if text:
-            tree = imp_parse(imp_lex(text))
-            ast = tree.values
+            tokens = imp_lex(text)
+            parse_result = imp_parse(tokens)
+            ast = parse_result.value
             ast.eval(env)

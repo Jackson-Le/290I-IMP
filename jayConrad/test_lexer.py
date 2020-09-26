@@ -23,22 +23,40 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import sys
-from IMPparser import *
-from IMPlexer import *
+import unittest
+from lexer import *
 
-if __name__ == '__main__':
-    print('IMP Language')
-    env = {}
-    parser = parser()
-    while True:
-        try:
-            text = input('IMP parser > ')
-        except EOFError:
-            break
-        if text:
-            characters = text
-            tokens = imp_lex(text)
-            print(tokens)
-            result = imp_parse(tokens)
-            print(result)
+KEYWORD = 'KEYWORD'
+INT = 'INT'
+ID = 'ID'
+token_exprs = [
+    (r'[ \t\n]+', None),
+    (r'#[^\n]*', None),
+    (r'keyword', KEYWORD),
+    (r'[0-9]+', INT),
+    (r'[A-Za-z][A-Za-z0-9_]*', ID)
+]
+
+class TestLexer(unittest.TestCase):
+    def lexer_test(self, code, expected):
+        actual = lex(code, token_exprs)
+        self.assertEquals(expected, actual)
+
+    def test_empty(self):
+        self.lexer_test('', [])
+
+    def test_id(self):
+        self.lexer_test('abc', [('abc', ID)])
+
+    def test_keyword_first(self):
+        self.lexer_test('keyword', [('keyword', KEYWORD)])
+
+    def test_space(self):
+        self.lexer_test(' ', [])
+
+    def test_id_space(self):
+        self.lexer_test('abc def', [('abc', ID), ('def', ID)])
+
+        
+    
+    

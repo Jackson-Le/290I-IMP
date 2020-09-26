@@ -23,22 +23,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import sys
-from IMPparser import *
-from IMPlexer import *
+class Equality:
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and \
+               self.__dict__ == other.__dict__
 
-if __name__ == '__main__':
-    print('IMP Language')
-    env = {}
-    parser = parser()
-    while True:
-        try:
-            text = input('IMP parser > ')
-        except EOFError:
-            break
-        if text:
-            characters = text
-            tokens = imp_lex(text)
-            print(tokens)
-            result = imp_parse(tokens)
-            print(result)
+    def __ne__(self, other):
+        return not self.__eq__(other)

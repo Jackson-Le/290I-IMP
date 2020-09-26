@@ -24,21 +24,9 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import sys
-from IMPparser import *
-from IMPlexer import *
+import unittest
 
 if __name__ == '__main__':
-    print('IMP Language')
-    env = {}
-    parser = parser()
-    while True:
-        try:
-            text = input('IMP parser > ')
-        except EOFError:
-            break
-        if text:
-            characters = text
-            tokens = imp_lex(text)
-            print(tokens)
-            result = imp_parse(tokens)
-            print(result)
+    test_names = ['test_lexer', 'test_combinators', 'test_imp_parser', 'test_eval']
+    suite = unittest.defaultTestLoader.loadTestsFromNames(test_names)
+    result = unittest.TextTestRunner().run(suite)

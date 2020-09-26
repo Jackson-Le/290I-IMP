@@ -24,21 +24,13 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import sys
-from IMPparser import *
-from IMPlexer import *
+from imp_lexer import *
 
 if __name__ == '__main__':
-    print('IMP Language')
-    env = {}
-    parser = parser()
-    while True:
-        try:
-            text = input('IMP parser > ')
-        except EOFError:
-            break
-        if text:
-            characters = text
-            tokens = imp_lex(text)
-            print(tokens)
-            result = imp_parse(tokens)
-            print(result)
+    filename = sys.argv[1]
+    file = open(filename)
+    characters = file.read()
+    file.close()
+    tokens = imp_lex(characters)
+    for token in tokens:
+        print token

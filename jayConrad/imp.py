@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright (c) 2011, Jay Conrod.
 # All rights reserved.
 
@@ -24,21 +26,27 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import sys
-from IMPparser import *
-from IMPlexer import *
+from imp_parser import *
+from imp_lexer import *
+
+def usage():
+    sys.stderr.write('Usage: imp filename\n')
+    sys.exit(1)
 
 if __name__ == '__main__':
-    print('IMP Language')
+    if len(sys.argv) != 2:
+        usage()
+    filename = sys.argv[1]
+    text = open(filename).read()
+    tokens = imp_lex(text)
+    parse_result = imp_parse(tokens)
+    if not parse_result:
+        sys.stderr.write('Parse error!\n')
+        sys.exit(1)
+    ast = parse_result.value
     env = {}
-    parser = parser()
-    while True:
-        try:
-            text = input('IMP parser > ')
-        except EOFError:
-            break
-        if text:
-            characters = text
-            tokens = imp_lex(text)
-            print(tokens)
-            result = imp_parse(tokens)
-            print(result)
+    ast.eval(env)
+
+    sys.stdout.write('Final variable values:\n')
+    for name in env:
+        sys.stdout.write('%s: %s\n' % (name, env[name]))
