@@ -1,10 +1,10 @@
-import Lexer
-import Parser
-import Execute
+from IMPlexer import *
+from IMPparser import *
+from execute import *
+from combinators import *
+from IMPast import *
 
 if __name__ == '__main__':
-    lexer = Lexer.TokenLexer()
-    parser = Parser.Parser()
     print('IMP Language')
     env = {}
 
@@ -17,5 +17,6 @@ if __name__ == '__main__':
             break
 
         if text:
-            tree = parser.parse(lexer.tokenize(text))
-            Execute.Interpret(tree, env)
+            tree = imp_parse(imp_lex(text))
+            ast = tree.values
+            ast.eval(env)

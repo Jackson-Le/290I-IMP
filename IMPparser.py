@@ -23,9 +23,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from imp_lexer import *
+import functools
+from IMPlexer import *
 from combinators import *
-from imp_ast import *
+from IMPast import *
 
 # Basic parsers
 def keyword(kw):
@@ -147,7 +148,7 @@ def process_group(parsed):
 
 def any_operator_in_list(ops):
     op_parsers = [keyword(op) for op in ops]
-    parser = reduce(lambda l, r: l | r, op_parsers)
+    parser = functools.reduce(lambda l, r: l | r, op_parsers)
     return parser
 
 # Operator keywords and precedence levels

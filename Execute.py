@@ -36,7 +36,7 @@ class Interpret:
         elif node[0] == '/':
             return self.walkTree(node[1]) / self.walkTree(node[2])
 
-        if node[0] == '=':
+        if node[0] == ':=':
             self.env[node[1]] = self.walkTree(node[2])
             return node[1]
 

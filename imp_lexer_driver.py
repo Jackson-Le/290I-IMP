@@ -23,43 +23,18 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import lexer
+import sys
+from IMPlexer import *
 
-RESERVED = 'RESERVED'
-INT      = 'INT'
-ID       = 'ID'
-
-token_exprs = [
-    (r'[ \n\t]+',              None),
-    (r'#[^\n]*',               None),
-    (r'\:=',                   RESERVED),
-    (r'\(',                    RESERVED),
-    (r'\)',                    RESERVED),
-    (r'\{',                    RESERVED),
-    (r'\}',                    RESERVED),
-    (r';',                     RESERVED),
-    (r'\+',                    RESERVED),
-    (r'-',                     RESERVED),
-    (r'\*',                    RESERVED),
-    (r'/',                     RESERVED),
-    (r'<=',                    RESERVED),
-    (r'<',                     RESERVED),
-    (r'>=',                    RESERVED),
-    (r'>',                     RESERVED),
-    (r'!=',                    RESERVED),
-    (r'=',                     RESERVED),
-    (r'and',                   RESERVED),
-    (r'or',                    RESERVED),
-    (r'not',                   RESERVED),
-    (r'if',                    RESERVED),
-    (r'then',                  RESERVED),
-    (r'else',                  RESERVED),
-    (r'while',                 RESERVED),
-    (r'do',                    RESERVED),
-    (r'end',                   RESERVED),
-    (r'[0-9]+',                INT),
-    (r'[A-Za-z][A-Za-z0-9_]*', ID),
-]
-
-def imp_lex(chars):
-    return lexer.lex(chars, token_exprs)
+if __name__ == '__main__':
+    print('IMP Language')
+    env = {}
+    while True:
+        try:
+            text = input('IMP Lexer > ')
+        except EOFError:
+            break
+        if text:
+            tokens = imp_lex(text)
+            for token in tokens:
+                print(token)
