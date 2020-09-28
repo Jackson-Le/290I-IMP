@@ -45,12 +45,14 @@ def parser():
 # Statements
 def stmt_list():
     separator = keyword(';') ^ (lambda x: lambda l, r: CompoundStatement(l, r))
+    print(separator)
     return Exp(stmt(), separator)
 
 def stmt():
     return assign_stmt() | \
            if_stmt()     | \
            while_stmt()
+#           while_stmt()  | \
 
 def assign_stmt():
     def process(parsed):
@@ -77,6 +79,14 @@ def while_stmt():
         return WhileStatement(condition, body)
     return keyword('while') + bexp() + \
            keyword('do') + Lazy(stmt_list) + \
+           keyword('end') ^ process
+
+def while_stmt_raja():
+    def process(parsed):
+        ((((_, condition), _), body), _) = parsed
+        return WhileStatement(condition, body)
+    return keyword('while') + bexp() +\
+           keyword('do') + keyword('{') + Lazy(stmt_list) + \
            keyword('end') ^ process
 
 # Boolean expressions

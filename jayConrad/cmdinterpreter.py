@@ -45,16 +45,24 @@ if __name__ == '__main__':
         if text:
             tokens = imp_lex(text)
             parse_result = imp_parse(tokens)
+            #print(parse_result)
             if not parse_result:
                 try:
                     parse_result = aexp()(tokens,0)
+                    if parse_result == None:
+                        #print(tokens)
+                        parse_result = bexp()(tokens,0)
                 except:
                     sys.stderr.write('Parse error!\n')
                     sys.exit(1)
             ast = parse_result.value
-            print(ast.eval(env))
-            for name in env:
-                print(name, env[name])
+            returnval = ast.eval(env)
+            if returnval  != None:
+                print(returnval)
+            else:
+                pass
+            #for name in env:
+                #print(name, env[name])
 
     sys.stdout.write('Final variable values:\n')
     for name in env:

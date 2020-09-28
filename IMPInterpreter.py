@@ -58,6 +58,9 @@ class CompoundStatement(Statement):
         self.first.eval(env)
         self.second.eval(env)
 
+    def to_string(self, env):
+        return str(self.first) + ',' + str(self.second)
+
 class IfStatement(Statement):
     def __init__(self, condition, true_stmt, false_stmt):
         self.condition = condition
