@@ -1,5 +1,5 @@
-from Tree import tree
-from Tree import build_tree
+from tree import tree
+from tree import build_tree
 
 class walk_the(tree):
     def print_tree(self):
