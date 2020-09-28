@@ -30,24 +30,24 @@ class tree:
         self.children.append(child)
 
 
-def build_tree():
-    root0 = tree('a')
+def build_tree(class_name):
+    root0 = class_name('a')
 
-    op1 = tree('(+)')
-    t2_op1 = tree('+')
+    op1 = class_name('(+)')
+    t2_op1 = class_name('+')
     op1.add_child(t2_op1)
 
-    n1 = tree('n')
-    t2_n1 = tree('3')
+    n1 = class_name('n')
+    t2_n1 = class_name('3')
     n1.add_child(t2_n1)
 
-    a1 = tree('a')
-    op2_a1 = tree('(+)')
-    n2_0_a1 = tree('n')
-    n2_1_a1 = tree('n')
-    op3_a1 = tree('*')
-    n3_0_a1 = tree('2')
-    n3_1_a1 = tree('1')
+    a1 = class_name('a')
+    op2_a1 = class_name('(+)')
+    n2_0_a1 = class_name('n')
+    n2_1_a1 = class_name('n')
+    op3_a1 = class_name('*')
+    n3_0_a1 = class_name('2')
+    n3_1_a1 = class_name('1')
     op2_a1.add_child(op3_a1)
     n2_0_a1.add_child(n3_0_a1)
     n2_1_a1.add_child(n3_1_a1)
@@ -61,6 +61,4 @@ def build_tree():
 
     root0.print_tree()
 
-if __name__ == '__main__':
-    build_tree()
-    pass
+build_tree(tree)
