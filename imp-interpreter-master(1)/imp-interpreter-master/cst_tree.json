@@ -1,0 +1,70 @@
+{
+  "children": [
+    {
+      "kw": "RESERVED",
+      "name": "(",
+      "val": "("
+    },
+    {
+      "kw": "RESERVED",
+      "name": "+",
+      "val": "+"
+    },
+    {
+      "children": [
+        {
+          "kw": "INT",
+          "name": "3",
+          "val": "3"
+        }
+      ],
+      "name": "Aexp"
+    },
+    {
+      "children": [
+        {
+          "kw": "RESERVED",
+          "name": "(",
+          "val": "("
+        },
+        {
+          "kw": "RESERVED",
+          "name": "*",
+          "val": "*"
+        },
+        {
+          "children": [
+            {
+              "kw": "INT",
+              "name": "2",
+              "val": "2"
+            }
+          ],
+          "name": "Aexp"
+        },
+        {
+          "children": [
+            {
+              "kw": "INT",
+              "name": "1",
+              "val": "1"
+            }
+          ],
+          "name": "Aexp"
+        },
+        {
+          "kw": "RESERVED",
+          "name": ")",
+          "val": ")"
+        }
+      ],
+      "name": "Aexp"
+    },
+    {
+      "kw": "RESERVED",
+      "name": ")",
+      "val": ")"
+    }
+  ],
+  "name": "Aexp"
+}

@@ -1,0 +1,233 @@
+{
+  "children": [
+    {
+      "kw": "ID",
+      "name": "n",
+      "val": "n"
+    },
+    {
+      "kw": "RESERVED",
+      "name": ":=",
+      "val": ":="
+    },
+    {
+      "children": [
+        {
+          "kw": "INT",
+          "name": "2",
+          "val": "2"
+        }
+      ],
+      "kw": "",
+      "name": "Aexp",
+      "val": ""
+    },
+    {
+      "kw": "RESERVED",
+      "name": ";",
+      "val": ";"
+    },
+    {
+      "children": [
+        {
+          "kw": "ID",
+          "name": "ans",
+          "val": "ans"
+        },
+        {
+          "kw": "RESERVED",
+          "name": ":=",
+          "val": ":="
+        },
+        {
+          "children": [
+            {
+              "kw": "INT",
+              "name": "1",
+              "val": "1"
+            }
+          ],
+          "kw": "",
+          "name": "Aexp",
+          "val": ""
+        },
+        {
+          "kw": "RESERVED",
+          "name": ";",
+          "val": ";"
+        },
+        {
+          "children": [
+            {
+              "kw": "RESERVED",
+              "name": "while",
+              "val": "while"
+            },
+            {
+              "children": [
+                {
+                  "kw": "RESERVED",
+                  "name": "(",
+                  "val": "("
+                },
+                {
+                  "kw": "RESERVED",
+                  "name": ">=",
+                  "val": ">="
+                },
+                {
+                  "children": [
+                    {
+                      "kw": "ID",
+                      "name": "n",
+                      "val": "n"
+                    }
+                  ],
+                  "kw": "",
+                  "name": "Aexp",
+                  "val": ""
+                },
+                {
+                  "children": [
+                    {
+                      "kw": "INT",
+                      "name": "1",
+                      "val": "1"
+                    }
+                  ],
+                  "kw": "",
+                  "name": "Aexp",
+                  "val": ""
+                },
+                {
+                  "kw": "RESERVED",
+                  "name": ")",
+                  "val": ")"
+                }
+              ],
+              "kw": "",
+              "name": "Bexp",
+              "val": ""
+            },
+            {
+              "kw": "RESERVED",
+              "name": "do",
+              "val": "do"
+            },
+            {
+              "kw": "RESERVED",
+              "name": "{",
+              "val": "{"
+            },
+            {
+              "children": [
+                {
+                  "kw": "ID",
+                  "name": "ans",
+                  "val": "ans"
+                },
+                {
+                  "kw": "RESERVED",
+                  "name": ":=",
+                  "val": ":="
+                },
+                {
+                  "children": [
+                    {
+                      "kw": "ID",
+                      "name": "ans",
+                      "val": "ans"
+                    }
+                  ],
+                  "kw": "",
+                  "name": "Aexp",
+                  "val": ""
+                },
+                {
+                  "kw": "RESERVED",
+                  "name": "+",
+                  "val": "+"
+                },
+                {
+                  "children": [
+                    {
+                      "kw": "ID",
+                      "name": "n",
+                      "val": "n"
+                    }
+                  ],
+                  "kw": "",
+                  "name": "Aexp",
+                  "val": ""
+                },
+                {
+                  "kw": "RESERVED",
+                  "name": ";",
+                  "val": ";"
+                },
+                {
+                  "children": [
+                    {
+                      "kw": "ID",
+                      "name": "n",
+                      "val": "n"
+                    },
+                    {
+                      "kw": "RESERVED",
+                      "name": ":=",
+                      "val": ":="
+                    },
+                    {
+                      "children": [
+                        {
+                          "kw": "ID",
+                          "name": "n",
+                          "val": "n"
+                        }
+                      ],
+                      "kw": "",
+                      "name": "Aexp",
+                      "val": ""
+                    },
+                    {
+                      "children": [
+                        {
+                          "kw": "INT",
+                          "name": "-1",
+                          "val": "-1"
+                        }
+                      ],
+                      "kw": "",
+                      "name": "Aexp",
+                      "val": ""
+                    }
+                  ],
+                  "kw": "",
+                  "name": "Com",
+                  "val": ""
+                }
+              ],
+              "kw": "",
+              "name": "Com",
+              "val": ""
+            },
+            {
+              "kw": "RESERVED",
+              "name": "}",
+              "val": "}"
+            }
+          ],
+          "kw": "",
+          "name": "Com",
+          "val": ""
+        }
+      ],
+      "kw": "",
+      "name": "Com",
+      "val": ""
+    }
+  ],
+  "kw": "",
+  "name": "Com",
+  "val": ""
+}
