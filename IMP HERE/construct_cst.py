@@ -2,7 +2,7 @@ from lexer import *
 from cst import *
 
 def properlyBuilt(tokens):
-    if type(tokens) != list:
+    if type(tokens) != list or len(tokens) <= 2:
         return False
     if tokens[0] == ('(', 'TERMINAL') and tokens[-1] == (')', 'TERMINAL'):
         return True
@@ -55,18 +55,18 @@ def makeBexp(tokens):
 def makeDo(tokens):
     if tokens[0][0] == 'do':
         counter = 0
-        for i in range(0, len(tokens)):
+        for i in range(1, len(tokens)):
             if tokens[i][0] == '{':
                 counter += 1
             elif tokens[i][0] == '}':
                 counter -= 1
                 if counter == 0:
-                    last = i
-        print(tokens[2:last])
+                    last = i + 1
+                    break
         Rnode = buildCST(tokens[2:last])
         return (Rnode, last)
     print('malformed')
-    print(tokens)
+#    print(tokens)
     return None
 
 def buildComs(tokens):
@@ -76,23 +76,33 @@ def buildComs(tokens):
             Lnode = makeBexp(tokens[1:8])
             intermed = makeDo(tokens[8:])
             Rnode = intermed[0]
-            last = intermed[1]
+            last = intermed[1] + 8
             coms = Node(value = tokens[0:last], type = 'COMS', children = [operator, Lnode, Rnode])
             return (coms, last)
 
 
 def buildCST(tokens, extra_children = []):
-    if assignmentCheck(tokens):
-        operator = Node(value = tokens[1][0], type = tokens[1][1])
-        Lnode = Node(value = tokens[0][0], type = tokens[0][1])
-        Rnode = buildCST(tokens[2:])
-        coms = Node(value = tokens[0:3], type = 'COMS', children = [operator, Lnode, Rnode])
-        if tokens[4:] == []:
-            return coms
+    if tokens == []:
+        return None
+    elif assignmentCheck(tokens):
+        left = Node(value = tokens[0][0], type = tokens[0][1])
+        counter = 0
+        if tokens[2][0] == '(':
+            for i in range(2, len(tokens)):
+                if tokens[i][0] == '(':
+                    counter += 1
+                elif tokens[i][0] == ')':
+                    counter -= 1
+                    last = i + 1
+            right = buildCST(tokens[2:last])
         else:
-            if extra_children == None:
-                return buildCST(tokens[4:], [coms])
-            return buildCST(tokens[4:], extra_children.append(coms))
+            last = 2
+            right = Node(value = tokens[2][0], type = tokens[2][1])
+        operator = Node(value = tokens[1][0], type = tokens[1][1])
+        if tokens[last+1:] != []:
+            return Node(value = tokens[:last + 1], type = 'COMS', children = [operator, left, right] + [buildCST(tokens[last+1:])])
+        else:
+            return Node(value = tokens, type = 'COMS', children = [operator, left, right] + extra_children)
     elif properlyBuilt(tokens):
         operation = tokens[1]
         operator = buildCST(operation)
@@ -137,8 +147,9 @@ def buildCST(tokens, extra_children = []):
         intermediate = buildComs(tokens)
         coms = intermediate[0]
         last = intermediate[1]
-        if extra_children == None:
-            return buildCST(tokens[last:], [coms])
+        #print(tokens[last:])
+        if extra_children == []:
+            return coms
         return buildCST(tokens[last:], extra_children.append(coms))
     else:
         return Node(value = tokens[0], type = tokens[1])
@@ -152,3 +163,33 @@ def treeWalker(tree):
     else:
         print(tree.type)
         print(tree.value)
+
+
+
+
+
+# if assignmentCheck(tokens):
+#     operator = Node(value = tokens[1][0], type = tokens[1][1])
+#     Lnode = Node(value = tokens[0][0], type = tokens[0][1])
+#     if tokens[2][1] == 'INT':
+#         Rnode = Node(value = tokens[2][0], type = tokens[2][1])
+#         last = 4
+#     else:
+#         counter = 0
+#         for i in range(2, len(tokens)):
+#             if tokens[i][0] == '(':
+#                 counter += 1
+#             elif tokens[i][0] == ')':
+#                 counter -= 1
+#                 if counter == 0:
+#                     last = i
+#                     break
+#         print(tokens[2:last+1])
+#         Rnode = buildCST(tokens[2:last+1])
+#     coms = Node(value = tokens[0:last], type = 'COMS', children = [operator, Lnode, Rnode])
+#     if tokens[last+1:] == []:
+#         return coms
+#     else:
+#         if extra_children == None:
+#             return buildCST(tokens[last:], [coms])
+#         return buildCST(tokens[last+1:], extra_children.append(coms))
