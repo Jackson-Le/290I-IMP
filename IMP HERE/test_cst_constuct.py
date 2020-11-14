@@ -12,7 +12,8 @@ e = imp_lex('n:=1')
 e1 = imp_lex('n:=(+,2,3);ans:=(-,n,1)')
 inter = imp_lex('n:=(+,ans,n)')
 while_loop = imp_lex('while(>=,n,1)do{ans:=(+,ans,n);n:=(-,n,1)}')
-
+while_loop1 = imp_lex('n:=2;ans:=1;while(>=,n,1)do{ans:=(+,ans,1);n:=(-,n,1)}')
+while_loop2 = imp_lex('n:=2;ans:=0;while(<=,n,16)do{ans:=(+,ans,n);n:=(*,2,n)}')
 bool = imp_lex('(>=,n,1)')
 
 #print('this is x:')
@@ -34,6 +35,9 @@ ee2 = buildCST(e1)
 
 #w1 = buildCST(while_loop)
 inter1 = buildCST(while_loop)
+
+wl1 = buildCST(while_loop1)
+wl2 = buildCST(while_loop2)
 #print(inter[2:9])
 def treeWalker(tree):
     if type(tree.value) != str:
@@ -43,11 +47,14 @@ def treeWalker(tree):
     else:
         print(tree.type)
         print(tree.value)
-
+print('while loop: n:=2;ans:=1;while(>=,n,1)do{ans:=(+,ans,1);n:=(-,n,1)}')
+treeWalker(wl1)
+print('while loop: n:=2;ans:=0;while(<=,n,16)do{ans:=(+,ans,n);n:=(*,2,n)}')
+treeWalker(wl2)
 #treeWalker(ee1)
 #print(e1)
 #treeWalker(w1)
-treeWalker(inter1)
+#treeWalker(inter1)
 #print(makeBexp(bool))
 #treeWalker(makeBexp(bool))
 #treeWalker(nn1)

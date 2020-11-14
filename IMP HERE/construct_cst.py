@@ -96,7 +96,7 @@ def buildCST(tokens, extra_children = []):
                     last = i + 1
             right = buildCST(tokens[2:last])
         else:
-            last = 2
+            last = 3
             right = Node(value = tokens[2][0], type = tokens[2][1])
         operator = Node(value = tokens[1][0], type = tokens[1][1])
         if tokens[last+1:] != []:
