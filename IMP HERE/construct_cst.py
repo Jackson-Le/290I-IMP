@@ -100,7 +100,8 @@ def buildCST(tokens, extra_children = []):
             right = Node(value = tokens[2][0], type = tokens[2][1])
         operator = Node(value = tokens[1][0], type = tokens[1][1])
         if tokens[last+1:] != []:
-            return Node(value = tokens[:last + 1], type = 'COMS', children = [operator, left, right] + [buildCST(tokens[last+1:])])
+            coms_node = Node(value = tokens[:last+1], type = 'COMS', children = [left, operator, right])
+            return Node(value = tokens[:last + 1], type = 'COMS', children = [coms_node] + [buildCST(tokens[last+1:])])
         else:
             return Node(value = tokens, type = 'COMS', children = [operator, left, right] + extra_children)
     elif properlyBuilt(tokens):
