@@ -6,6 +6,8 @@ class Node:
         self.type = type
         self.parent = parent
         self.children = children
+        self.bool  = None
+        
         for i in children:
             i.update_parent(self)
 
