@@ -46,7 +46,7 @@ def makeBexp(tokens):
         operator = Node(value = tokens[1][0], type = tokens[1][1])
         Lnode = Node(value = tokens[3][0], type = tokens[3][1])
         Rnode = Node(value = tokens[5][0], type = tokens[5][1])
-        coms = Node(value = tokens[0:3], type = 'COMS', children = [operator, Lnode, Rnode])
+        coms = Node(value = tokens, type = 'BExp', children = [operator, Lnode, Rnode])
         return coms
     print(tokens)
     print('malformed')
@@ -61,7 +61,7 @@ def makeDo(tokens):
             elif tokens[i][0] == '}':
                 counter -= 1
                 if counter == 0:
-                    last = i + 1
+                    last = i
                     break
         Rnode = buildCST(tokens[2:last])
         return (Rnode, last)
@@ -93,7 +93,10 @@ def buildCST(tokens, extra_children = []):
                     counter += 1
                 elif tokens[i][0] == ')':
                     counter -= 1
-                    last = i + 1
+                    if counter == 0:
+                        last = i + 1
+                        break
+            #print(tokens[2:last])
             right = buildCST(tokens[2:last])
         else:
             last = 3
@@ -154,7 +157,9 @@ def buildCST(tokens, extra_children = []):
         return buildCST(tokens[last:], extra_children.append(coms))
     else:
         return Node(value = tokens[0], type = tokens[1])
-    return Node(value = tokens, type = 'Aexp', children = [operator, Lnode, Rnode] + extra_children)
+    if tokens[1][1] == 'BOOLEAN':
+        return Node(value = tokens, type =  'BExp', children = [operator, Lnode, Rnode] + extra_children)
+    return Node(value = tokens, type =  'AExp', children = [operator, Lnode, Rnode] + extra_children)
 
 def treeWalker(tree):
     if type(tree.value) != str:
