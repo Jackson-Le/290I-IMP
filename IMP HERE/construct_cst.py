@@ -114,7 +114,7 @@ def buildCST(tokens, extra_children = []):
         left = nodes_id[0]
         if type(left) == list and len(left) > 1:
             # Lnode is the node that we have made for the left side of the tree
-            Lnode = Node(value = left, type = 'Aexp', children = [buildCST(left[1])])
+            Lnode = Node(value = left, type = 'AExp', children = [buildCST(left[1])])
             # Lnodes_id is the AExp finding function that returns tokens and the length of the tokens
             Lnodes_id = findAExp(Lnode.value[3:])
             LLnode = buildCST(Lnodes_id[0]) # recursively builds CST node
@@ -133,7 +133,7 @@ def buildCST(tokens, extra_children = []):
         right = findAExp(remaining_tokens)[0]
         if type(right) == list and len(right) > 1:
             # Rnode is the node that we have made for the left side of the tree
-            Rnode = Node(value = right, type = 'Aexp', children = [buildCST(remaining_tokens[1])])
+            Rnode = Node(value = right, type = 'AExp', children = [buildCST(remaining_tokens[1])])
             # Rnodes_id is the AExp finding function that returns tokens and the length of the tokens
             Rnodes_id = findAExp(Rnode.value[3:])
             RLnode = buildCST(Rnodes_id[0])
