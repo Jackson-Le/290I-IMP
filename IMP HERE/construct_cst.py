@@ -43,13 +43,15 @@ def comsCheck(tokens):
 
 def makeBexp(tokens):
     if properlyBuilt(tokens):
+        if len(tokens) == 3:
+            return Node(value = tokens[1][0], type = 'BExp')
         operator = Node(value = tokens[1][0], type = tokens[1][1])
         Lnode = Node(value = tokens[3][0], type = tokens[3][1])
         Rnode = Node(value = tokens[5][0], type = tokens[5][1])
         coms = Node(value = tokens, type = 'BExp', children = [operator, Lnode, Rnode])
         return coms
     print(tokens)
-    print('malformed')
+    print('malformed bexp')
     return None
 
 def makeDo(tokens):
@@ -65,19 +67,124 @@ def makeDo(tokens):
                     break
         Rnode = buildCST(tokens[2:last])
         return (Rnode, last)
-    print('malformed')
-#    print(tokens)
+    print('malformed do')
+    print(tokens)
+    return None
+
+def makeThen(tokens):
+    if tokens[0][0] == 'then':
+        counter = 0
+        for i in range(len(tokens)):
+            if tokens[i][0] == '{':
+                counter += 1
+            elif tokens[i][0] == '}':
+                counter -= 1
+                if counter == 0:
+                    last = i
+                    break
+        #print(tokens[2:last])
+        Rnode = buildCST(tokens[2:last])
+        return (Rnode, last)
+    elif tokens[0][0] == '{':
+        counter = 0
+        for i in range(len(tokens)):
+            if tokens[i][0] == '{':
+                counter += 1
+            elif tokens[i][0] == '}':
+                counter -= 1
+                if counter == 0:
+                    last = i
+                    break
+        Rnode = buildCST(tokens[1:last])
+        return (Rnode, last)
+    print('malformed then')
+    print(tokens)
+    return None
+
+def makeElse(tokens):
+    #print(tokens)
+    if tokens[0][0] == '{':
+        counter = 0
+        for i in range(len(tokens)):
+            if tokens[i][0] == '{':
+                counter += 1
+            elif tokens[i][0] == '}':
+                counter -= 1
+                if counter == 0:
+                    last = i
+                    break
+        #print(tokens[1:last])
+        Rnode = buildCST(tokens[1:last])
+        return (Rnode, last)
+    print(tokens)
+    print('malformed else')
     return None
 
 def buildComs(tokens):
+    def findBounds(first):
+        #print('here', first, tokens[first:])
+        counter = 0
+        for i in range(first, len(tokens)):
+            if tokens[i][0] == '(' or tokens[i][0] == '{':
+                #print(i, 'started')
+                counter += 1
+            elif tokens[i][0] == ')' or tokens[i][0] == '}':
+                counter -= 1
+                #print(i, 'ended')
+                if counter == 0:
+                    last = i + 1
+                    break
+        return [first, last]
     if tokens[0][1] == 'COMS': # construct a com type
         if tokens[0][0] == 'while': # construct a while loop
             operator = Node(value = tokens[0][0], type = tokens[0][1])
-            Lnode = makeBexp(tokens[1:8])
-            intermed = makeDo(tokens[8:])
+            bexpbounds = findBounds(1)
+            Lnode = makeBexp(tokens[1:bexpbounds[1]])
+            intermed = makeDo(tokens[bexpbounds[1]:])
             Rnode = intermed[0]
-            last = intermed[1] + 8
+            last = intermed[1] + bexpbounds[1]
             coms = Node(value = tokens[0:last], type = 'COMS', children = [operator, Lnode, Rnode])
+            return (coms, last)
+        if tokens[0][0] == 'if': # construct the types of if
+            temp_array = []
+            temp_list = []
+            temp_bound = []
+            temp_bexp = []
+            temp_intermed = []
+            temp_Lnode = []
+            temp_type = []
+            bexpbounds = findBounds(1)
+            Bool = makeBexp(tokens[1:bexpbounds[1]])
+            intermed = makeThen(tokens[bexpbounds[1]:])
+            Lnode = intermed[0]
+            last = intermed[1] + bexpbounds[1]
+            first_if = Node(value = tokens[0][0], type = tokens[0][1], children = [Bool, Lnode])
+            if len(tokens) > last+1 and tokens[last+1] != []:
+                while len(tokens) > last+1 and tokens[last+1][0] == 'elif':
+                    temp_bound.append(findBounds(last+2))
+                    temp_bexp.append(makeBexp(tokens[temp_bound[-1][0]:temp_bound[-1][1]]))
+                    temp_intermed.append(makeThen(tokens[temp_bound[-1][1]:]))
+                    temp_Lnode.append(temp_intermed[-1][0])
+                    temp_type.append('elif')
+                    #temp_array.append(Node(value = tokens[last+1][0], type = tokens[0][1], children = [temp_bexp[count], temp_Lnode[count]]))
+                    last = temp_intermed[-1][1] + temp_bound[-1][1]
+                if len(tokens) > last+1 and tokens[last+1][0] == 'else':
+                    temp_bound.append(findBounds(last+2))
+                    #print(tokens[temp_bound[-1][0]:temp_bound[-1][1]])
+                    #temp_bexp.append(makeBexp(tokens[temp_bound[-1][0]:temp_bound[-1][1]]))
+                    temp_intermed.append(makeElse(tokens[temp_bound[-1][0]:temp_bound[-1][1]]))
+                    temp_Lnode.append(temp_intermed[-1][0])
+                    temp_type.append('else')
+                    #temp_array.append(Node(value = tokens[last+1][0], type = tokens[0][1], children = [temp_bexp[count], temp_Lnode[count]]))
+                    last = temp_intermed[-1][1] + temp_bound[-1][1]
+            #print(len(temp_Lnode))
+            if len(temp_Lnode) == 0:
+                coms = Node(value = tokens[0:last], type = 'COMS', children = [first_if])
+            else:
+                for i in range(len(temp_Lnode)-1,-1,-1):
+                    temp_list.append(Node(value = tokens[temp_bound[i][0]:temp_bound[i][1]], type = temp_type[i], children = [temp_Lnode[i]]+temp_array))
+                    temp_array = [temp_list[-1]]
+                coms = Node(value = tokens[:temp_bound[-1][1]], type = 'COMS', children = [first_if, temp_array[-1]])
             return (coms, last)
 
 
@@ -114,7 +221,7 @@ def buildCST(tokens, extra_children = []):
         left = nodes_id[0]
         if type(left) == list and len(left) > 1:
             # Lnode is the node that we have made for the left side of the tree
-            Lnode = Node(value = left, type = 'AExp', children = [buildCST(left[1])])
+            Lnode = Node(value = left, type = 'Aexp', children = [buildCST(left[1])])
             # Lnodes_id is the AExp finding function that returns tokens and the length of the tokens
             Lnodes_id = findAExp(Lnode.value[3:])
             LLnode = buildCST(Lnodes_id[0]) # recursively builds CST node
@@ -133,7 +240,7 @@ def buildCST(tokens, extra_children = []):
         right = findAExp(remaining_tokens)[0]
         if type(right) == list and len(right) > 1:
             # Rnode is the node that we have made for the left side of the tree
-            Rnode = Node(value = right, type = 'AExp', children = [buildCST(remaining_tokens[1])])
+            Rnode = Node(value = right, type = 'Aexp', children = [buildCST(remaining_tokens[1])])
             # Rnodes_id is the AExp finding function that returns tokens and the length of the tokens
             Rnodes_id = findAExp(Rnode.value[3:])
             RLnode = buildCST(Rnodes_id[0])
@@ -149,6 +256,7 @@ def buildCST(tokens, extra_children = []):
             Rnode = Node(value = right, type = 'INT') # if AExp is singular
     elif comsCheck(tokens):
         intermediate = buildComs(tokens)
+        #print(intermediate)
         coms = intermediate[0]
         last = intermediate[1]
         #print(tokens[last:])
@@ -161,15 +269,18 @@ def buildCST(tokens, extra_children = []):
         return Node(value = tokens, type =  'BExp', children = [operator, Lnode, Rnode] + extra_children)
     return Node(value = tokens, type =  'AExp', children = [operator, Lnode, Rnode] + extra_children)
 
-def treeWalker(tree):
+def treeWalker(tree, depth = 0):
     if type(tree.value) != str:
-        print(tree.type)
+        print(tree.type)#, '\t \t depth:', depth)
+        for node in tree.children:
+            treeWalker(node)#, depth + 1)
+    elif tree.value == 'if' or tree.value == 'elif' or tree == 'else':
+        print(tree.value)#, '\t \t depth:', depth)
         for node in tree.children:
             treeWalker(node)
     else:
-        print(tree.type)
-        print(tree.value)
-
+        print(tree.type)#, '\t \t depth:', depth + 1)
+        print(tree.value)#, '\t \t depth:', depth + 1)
 
 
 
