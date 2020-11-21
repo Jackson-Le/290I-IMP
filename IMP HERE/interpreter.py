@@ -4,6 +4,8 @@ from test_cst_constuct import *
 from ast import *
 
 var = {}
+
+
 def interpret(node):
     totals = []    
     if node.type == 'COMS' and type(node.value) == list:
@@ -38,6 +40,34 @@ def interpret(node):
                 interpret(node.children[i])
         if condition == True:
             interpret(node)
+    
+    if node.type == 'COMS' and node.value == 'if':
+        condition = None
+        for i in range(len(node.children)):
+            if node.children[i].type == 'BOOLEAN':
+                interpret(node.children[i])
+                condition = node.children[i].bool 
+        for i in range(len(node.children)):
+            if node.children[i].value != 'BOOLEAN' and condition == True:
+                interpret(node.children[i])
+        if condition == True:
+            node.parent.bool = True
+    
+    if node.type == 'COMS' and node.value == 'elif' and node.parent.bool != True:
+        condition = None
+        for i in range(len(node.children)):
+            if node.children[i].type == 'BOOLEAN':
+                interpret(node.children[i])
+                condition = node.children[i].bool 
+        for i in range(len(node.children)):
+            if node.children[i].value != 'BOOLEAN' and condition == True:
+                interpret(node.children[i])
+        if condition == True:
+            node.parent.bool = True
+
+    if node.type == 'COMS' and node.value == 'else' and node.parent.bool != True:
+        for i in range(len(node.children)):
+            interpret(node.children[i])    
                 
     if node.type == 'BOOLEAN':
         left  = None
