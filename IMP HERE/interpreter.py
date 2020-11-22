@@ -103,7 +103,6 @@ def interpret(node):
         elif node.value =='!=':
             if left != right:
                 node.bool = True
-        print(node.parent.value,'=', node.bool)
         
     if node.type == 'OPERATOR':
         for i in range(len(node.children)):
@@ -131,37 +130,3 @@ def interpret(node):
             for j in range(len(totals)-1):
                 node.value = totals[0]
                 node.value /= totals[j+1]
-
-'''
-while_loop1 = buildCST(imp_lex('n:=2;ans:=1;while(>=,n,1)do{ans:=(+,ans,1);n:=(-,n,1)}'))
-while_loop2 = buildCST(imp_lex('n:=2;ans:=0;while(<=,n,16)do{ans:=(+,ans,n);n:=(*,2,n)}'))
-
-ast(while_loop1)
-interpret(while_loop1)
-print(var)
-var = {}
-
-ast(while_loop2)
-interpret(while_loop2)
-print(var)
-var = {}
-'''
-simple_else = buildCST(imp_lex('n:=2;ans:=0;if(>,n,1)then{ans:=(+,ans,1)}else{ans:=(-,ans,1)}'))
-else_if = buildCST(imp_lex('n:=2;ans:=0;if(>,n,1)then{ans:=(+,ans,1)}elif(<=,n,1)then{ans:=(-,ans,1)}'))
-else_if_else = buildCST(imp_lex('n:=0;ans:=0;if(>,n,2)then{ans:=(+,ans,1)}elif(<,n,2)then{ans:=(-,ans,3)}else{ans:=2}'))
-
-
-ast(simple_else)
-interpret(simple_else)
-print(var)
-var = {}
-
-ast(else_if)
-interpret(else_if)
-print(var)
-
-var = {}
-ast(else_if_else)
-interpret(else_if_else)
-print(var)
-
