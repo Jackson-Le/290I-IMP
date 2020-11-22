@@ -187,14 +187,16 @@ def buildComs(tokens):
             else:
                 for i in range(len(temp_Lnode)-1,-1,-1):
                     if temp_val[i] != 'else':
-                        temp_list.append(Node(value = temp_val[i], type = temp_type[i], children = [temp_bexp[i], temp_Lnode[i]]+temp_array))
-                        #tokens[temp_bound[i][0]:temp_bound[i][1]]
-                        temp_array = [temp_list[-1]]
+                    #     temp_list.append(Node(value = temp_val[i], type = temp_type[i], children = [temp_bexp[i], temp_Lnode[i]]+temp_array))
+                    #     #tokens[temp_bound[i][0]:temp_bound[i][1]]
+                    #     temp_array = [temp_list[-1]]
+                        temp_list.append(Node(value = temp_val[i], type = temp_type[i], children = [temp_bexp[i], temp_Lnode[i]]))
                     else:
-                        temp_list.append(Node(value = temp_val[i], type = temp_type[i], children = [temp_Lnode[i]]+temp_array))
-                        #tokens[temp_bound[i][0]:temp_bound[i][1]]
-                        temp_array = [temp_list[-1]]
-                coms = Node(value = tokens[:temp_bound[-1][1]], type = 'COMS', children = [first_if, temp_array[-1]])
+                    #     temp_list.append(Node(value = temp_val[i], type = temp_type[i], children = [temp_Lnode[i]]+temp_array))
+                    #     #tokens[temp_bound[i][0]:temp_bound[i][1]]
+                    #     temp_array = [temp_list[-1]]
+                         temp_list.append(Node(value = temp_val[i], type = temp_type[i], children = [temp_Lnode[i]]))
+                coms = Node(value = tokens[:temp_bound[-1][1]], type = 'COMS', children = ([first_if]+temp_list))
             return (coms, last)
 
 
@@ -285,6 +287,7 @@ def treeWalker(tree, depth = 0):
         for node in tree.children:
             treeWalker(node)#, depth + 1)
     elif tree.value == 'if' or tree.value == 'elif' or tree.value == 'else':
+        print(tree.type)
         print(tree.value)#, '\t \t depth:', depth)
         for node in tree.children:
             treeWalker(node)

@@ -86,6 +86,7 @@ def treeWalker(tree, depth = 0):
         for node in tree.children:
             treeWalker(node)#, depth + 1)
     elif tree.value == 'if' or tree.value == 'elif' or tree.value == 'else':
+        print(tree.type)
         print(tree.value)#, '\t \t depth:', depth)
         for node in tree.children:
             treeWalker(node)
