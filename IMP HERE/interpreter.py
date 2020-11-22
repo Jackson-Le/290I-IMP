@@ -62,10 +62,8 @@ def interpret(node):
                 interpret(node.children[i])
         if condition == True:
             node.parent.bool = True
-        print(node.parent.bool)
 
     if node.type == 'COMS' and node.value == 'else' and node.parent.bool != True:
-        print('else!')
         for i in range(len(node.children)):
             interpret(node.children[i])    
                 
@@ -150,9 +148,9 @@ var = {}
 '''
 simple_else = buildCST(imp_lex('n:=2;ans:=0;if(>,n,1)then{ans:=(+,ans,1)}else{ans:=(-,ans,1)}'))
 else_if = buildCST(imp_lex('n:=2;ans:=0;if(>,n,1)then{ans:=(+,ans,1)}elif(<=,n,1)then{ans:=(-,ans,1)}'))
-else_if_else = buildCST(imp_lex('n:=2;ans:=0;if(>,n,2)then{ans:=(+,ans,1)}elif(<,n,2)then{ans:=(-,ans,1)}else{ans:=2}'))
+else_if_else = buildCST(imp_lex('n:=0;ans:=0;if(>,n,2)then{ans:=(+,ans,1)}elif(<,n,2)then{ans:=(-,ans,3)}else{ans:=2}'))
 
-'''
+
 ast(simple_else)
 interpret(simple_else)
 print(var)
@@ -161,8 +159,9 @@ var = {}
 ast(else_if)
 interpret(else_if)
 print(var)
+
 var = {}
 ast(else_if_else)
 interpret(else_if_else)
 print(var)
-'''
+
