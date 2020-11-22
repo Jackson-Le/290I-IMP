@@ -185,7 +185,8 @@ def buildComs(tokens):
             if len(temp_Lnode) == 0:
                 coms = Node(value = tokens[0:last], type = 'COMS', children = [first_if])
             else:
-                for i in range(len(temp_Lnode)-1,-1,-1):
+                #for i in range(len(temp_Lnode)-1,-1,-1):
+                for i in range(0, len(temp_Lnode)):
                     if temp_val[i] != 'else':
                     #     temp_list.append(Node(value = temp_val[i], type = temp_type[i], children = [temp_bexp[i], temp_Lnode[i]]+temp_array))
                     #     #tokens[temp_bound[i][0]:temp_bound[i][1]]
