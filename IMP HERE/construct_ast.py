@@ -36,8 +36,9 @@ def ast(node):
         for j in range(len(delete)):
             del(node.children[delete[j]])
         for i in range(len(node.children)):
-            if len(node.children[i].children) > 1:
+            if len(node.children[i].children) >= 1:
                 ast(node.children[i])
+            
 
 def ASTtreeWalker(tree):
     if type(tree.value) != str:
