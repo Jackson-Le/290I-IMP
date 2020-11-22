@@ -153,6 +153,7 @@ def buildComs(tokens):
             temp_intermed = []
             temp_Lnode = []
             temp_type = []
+            temp_val = []
             bexpbounds = findBounds(1)
             Bool = makeBexp(tokens[1:bexpbounds[1]])
             intermed = makeThen(tokens[bexpbounds[1]:])
@@ -165,7 +166,8 @@ def buildComs(tokens):
                     temp_bexp.append(makeBexp(tokens[temp_bound[-1][0]:temp_bound[-1][1]]))
                     temp_intermed.append(makeThen(tokens[temp_bound[-1][1]:]))
                     temp_Lnode.append(temp_intermed[-1][0])
-                    temp_type.append('elif')
+                    temp_type.append('COMS')
+                    temp_val.append('elif')
                     #temp_array.append(Node(value = tokens[last+1][0], type = tokens[0][1], children = [temp_bexp[count], temp_Lnode[count]]))
                     last = temp_intermed[-1][1] + temp_bound[-1][1]
                 if len(tokens) > last+1 and tokens[last+1][0] == 'else':
@@ -173,8 +175,10 @@ def buildComs(tokens):
                     #print(tokens[temp_bound[-1][0]:temp_bound[-1][1]])
                     #temp_bexp.append(makeBexp(tokens[temp_bound[-1][0]:temp_bound[-1][1]]))
                     temp_intermed.append(makeElse(tokens[temp_bound[-1][0]:temp_bound[-1][1]]))
+                    #temp_bexp.append(Node(value = 'empty', type = 'not real'))
                     temp_Lnode.append(temp_intermed[-1][0])
-                    temp_type.append('else')
+                    temp_type.append('COMS')
+                    temp_val.append('else')
                     #temp_array.append(Node(value = tokens[last+1][0], type = tokens[0][1], children = [temp_bexp[count], temp_Lnode[count]]))
                     last = temp_intermed[-1][1] + temp_bound[-1][1]
             #print(len(temp_Lnode))
@@ -182,8 +186,14 @@ def buildComs(tokens):
                 coms = Node(value = tokens[0:last], type = 'COMS', children = [first_if])
             else:
                 for i in range(len(temp_Lnode)-1,-1,-1):
-                    temp_list.append(Node(value = tokens[temp_bound[i][0]:temp_bound[i][1]], type = temp_type[i], children = [temp_Lnode[i]]+temp_array))
-                    temp_array = [temp_list[-1]]
+                    if temp_val[i] != 'else':
+                        temp_list.append(Node(value = temp_val[i], type = temp_type[i], children = [temp_bexp[i], temp_Lnode[i]]+temp_array))
+                        #tokens[temp_bound[i][0]:temp_bound[i][1]]
+                        temp_array = [temp_list[-1]]
+                    else:
+                        temp_list.append(Node(value = temp_val[i], type = temp_type[i], children = [temp_Lnode[i]]+temp_array))
+                        #tokens[temp_bound[i][0]:temp_bound[i][1]]
+                        temp_array = [temp_list[-1]]
                 coms = Node(value = tokens[:temp_bound[-1][1]], type = 'COMS', children = [first_if, temp_array[-1]])
             return (coms, last)
 
@@ -274,7 +284,7 @@ def treeWalker(tree, depth = 0):
         print(tree.type)#, '\t \t depth:', depth)
         for node in tree.children:
             treeWalker(node)#, depth + 1)
-    elif tree.value == 'if' or tree.value == 'elif' or tree == 'else':
+    elif tree.value == 'if' or tree.value == 'elif' or tree.value == 'else':
         print(tree.value)#, '\t \t depth:', depth)
         for node in tree.children:
             treeWalker(node)
